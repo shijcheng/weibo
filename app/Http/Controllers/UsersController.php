@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
@@ -13,6 +14,17 @@ use Illuminate\View\View;
 
 class UsersController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth', [
+           'except' => ['shw', 'create', 'store']
+        ]);
+
+        $this->middleware('guest', [
+           'only' => ['create']
+        ]);
+    }
 
     /**
      * 注册页
@@ -29,9 +41,11 @@ class UsersController extends Controller
      *
      * @param User $user
      * @return Application|Factory|View
+     * @throws AuthorizationException
      * @author shijiacheng
      */
     public function show(User $user) {
+        $this->authorize('update', $user);
         return view('users.show', compact('user'));
     }
 
@@ -65,9 +79,11 @@ class UsersController extends Controller
      *
      * @param User $user
      * @return Application|Factory|View
+     * @throws AuthorizationException
      */
     public function edit(User $user)
     {
+        $this->authorize('update', $user);
         return view('users.edit', compact('user'));
     }
 
@@ -77,11 +93,12 @@ class UsersController extends Controller
      * @param User $user
      * @param Request $request
      * @return RedirectResponse
-     * @throws ValidationException
+     * @throws ValidationException|AuthorizationException
      * @author shijiacheng
      */
     public function update(User $user, Request $request)
     {
+        $this->authorize('update', $user);
         $this->validate($request, [
            'name' => 'required|max:50',
            'password' => 'nullable|confirmed|min:6'
