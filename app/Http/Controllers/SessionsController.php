@@ -2,17 +2,37 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
 
 class SessionsController extends Controller
 {
 
+    /**
+     * 登录页
+     *
+     * @return Application|Factory|View
+     * @author shijiacheng
+     */
     public function create()
     {
         return view('sessions.create');
     }
 
+    /**
+     * 登录
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     * @throws ValidationException
+     * @author shijiacheng
+     */
     public function store(Request $request)
     {
         $credentials = $this->validate($request, [
@@ -27,9 +47,14 @@ class SessionsController extends Controller
             session()->flash('danger', '很抱歉，您的邮箱和密码不匹配');
             return redirect()->back()->withInput();
         }
-
     }
 
+    /**
+     * 退出登录
+     *
+     * @return Application|RedirectResponse|Redirector
+     * @author shijiacheng
+     */
     public function destroy()
     {
         Auth::logout();
