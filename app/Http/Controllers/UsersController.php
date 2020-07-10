@@ -52,7 +52,7 @@ class UsersController extends Controller
     }
 
     /**
-     * 登录
+     * 	创建用户
      *
      * @param Request $request
      * @return RedirectResponse
