@@ -18,7 +18,7 @@ class UsersController extends Controller
     public function __construct()
     {
         $this->middleware('auth', [
-           'except' => ['shw', 'create', 'store']
+           'except' => ['shw', 'create', 'store', 'index']
         ]);
 
         $this->middleware('guest', [
@@ -118,6 +118,18 @@ class UsersController extends Controller
         session()->flash('success', '个人资料更新成功！');
 
         return redirect()->route('users.show', $user->id);
+    }
+
+    /**
+     * 用户列表
+     *
+     * @return Application|Factory|View
+     * @author shijiacheng
+     */
+    public function index()
+    {
+        $users = User::paginate(10);
+        return view('users.index', compact('users'));
     }
 
 }
