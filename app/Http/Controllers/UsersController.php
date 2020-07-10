@@ -18,11 +18,11 @@ class UsersController extends Controller
     public function __construct()
     {
         $this->middleware('auth', [
-           'except' => ['shw', 'create', 'store', 'index']
+            'except' => ['shw', 'create', 'store', 'index']
         ]);
 
         $this->middleware('guest', [
-           'only' => ['create']
+            'only' => ['create']
         ]);
     }
 
@@ -32,7 +32,8 @@ class UsersController extends Controller
      * @return Application|Factory|View
      * @author shijiacheng
      */
-    public function create() {
+    public function create()
+    {
         return view('users.create');
     }
 
@@ -44,7 +45,8 @@ class UsersController extends Controller
      * @throws AuthorizationException
      * @author shijiacheng
      */
-    public function show(User $user) {
+    public function show(User $user)
+    {
         $this->authorize('update', $user);
         return view('users.show', compact('user'));
     }
@@ -100,8 +102,8 @@ class UsersController extends Controller
     {
         $this->authorize('update', $user);
         $this->validate($request, [
-           'name' => 'required|max:50',
-           'password' => 'nullable|confirmed|min:6'
+            'name' => 'required|max:50',
+            'password' => 'nullable|confirmed|min:6'
         ]);
 
         // 赋值
@@ -130,6 +132,31 @@ class UsersController extends Controller
     {
         $users = User::paginate(10);
         return view('users.index', compact('users'));
+    }
+
+    /**
+     * 删除用户
+     *
+     * @param User $user
+     * @return RedirectResponse
+     * @throws AuthorizationException
+     * @author shijiacheng
+     */
+    public function destroy(User $user, Request $request)
+    {
+        $this->authorize('destroy', $user);
+
+        $user->delete();
+
+        session()->flash('success', '成功删除用户！');
+        // 分页，查询当前页是否存在「也许删除的是最后一页最后一条数据」
+        $paginate = User::paginate(10);
+        // 如果不存在页，跳转到最后一页
+        if ($request->input('page') > $paginate->lastPage()) {
+            return redirect()->route('users.index', ['page' => $paginate->lastPage()]);
+        }
+
+        return back();
     }
 
 }
