@@ -45,4 +45,4 @@ Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm
 Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');
 
 // Statuses RESTful 路由
-Route::resource('statuses', 'StatusesController', ['only' => 'store', 'destroy']);
+Route::resource('statuses', 'StatusesController', ['only' => ['store', 'destroy']]);
