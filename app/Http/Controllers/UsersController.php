@@ -56,7 +56,7 @@ class UsersController extends Controller
     }
 
     /**
-     * 	创建用户
+     *    创建用户
      *
      * @param Request $request
      * @return RedirectResponse
@@ -202,6 +202,34 @@ class UsersController extends Controller
         session()->flash('success', '恭喜你，激活成功！');
         return redirect()->route('users.show', [$user]);
 
+    }
+
+    /**
+     * 关注列表
+     *
+     * @param User $user
+     * @return Application|Factory|View
+     * @author shijiacheng
+     */
+    public function followings(User $user)
+    {
+        $users = $user->followings()->paginate(30);
+        $title = $user->name . '关注的人';
+        return view('users.show_follow', compact('users', 'title'));
+    }
+
+    /**
+     * 粉丝列表
+     *
+     * @param User $user
+     * @return Application|Factory|View
+     * @author shijiacheng
+     */
+    public function followers(User $user)
+    {
+        $users = $user->followers()->paginate(30);
+        $title = $user->name . '的粉丝';
+        return view('users.show_follow', compact('users', 'title'));
     }
 
 }
