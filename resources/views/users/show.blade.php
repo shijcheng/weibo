@@ -9,18 +9,24 @@
                     <section class="user_info">
                         @include('shared._user_info', ['user' => $user])
                     </section>
-                    @if($statuses->count() > 0)
-                        <ul class="list-unstyled">
-                            @foreach($statuses as $status)
-                                @include('statuses._status')
-                            @endforeach
-                        </ul>
-                        <div class="mt-5">
-                            {!! $statuses->render() !!}
-                        </div>
-                    @else
-                        <p>没有数据！</p>
-                    @endif
+                    <section class="stats mt-2">
+                        @include('shared._status', ['user' => $user])
+                    </section>
+                    <hr>
+                    <section class="stats">
+                        @if($statuses->count() > 0)
+                            <ul class="list-unstyled">
+                                @foreach($statuses as $status)
+                                    @include('statuses._status')
+                                @endforeach
+                            </ul>
+                            <div class="mt-5">
+                                {!! $statuses->render() !!}
+                            </div>
+                        @else
+                            <p>没有数据！</p>
+                        @endif
+                    </section>
                 </div>
             </div>
         </div>
