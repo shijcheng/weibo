@@ -48,7 +48,6 @@ class UsersController extends Controller
      */
     public function show(User $user)
     {
-        $this->authorize('update', $user);
         $statuses = $user->statuses()
             ->orderBy('created_at', 'desc')
             ->paginate(10);
