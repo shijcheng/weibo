@@ -57,7 +57,3 @@ Route::post('/users/followers/{user}', 'FollowersController@store')->name('follo
 // 取关用户
 Route::delete('/users/followers/{user}', 'FollowersController@destroy')->name('followers.destroy');
 
-// 测试
-Route::get('test/status', 'TestController@statusContent')->name('test.status');
-
-Route::post('test/login','SessionsController@store')->name('test.login');
